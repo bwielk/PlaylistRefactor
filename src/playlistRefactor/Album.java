@@ -6,35 +6,30 @@ public class Album {
 	
     private String name;
     private String artist;
-    private ArrayList<Song> songs;
+    private SongList songs;
 
     public Album(String name, String artist) {
         this.name = name;
         this.artist = artist;
-        this.songs = new ArrayList<Song>();
+        this.songs = new SongList();
     }
 
     public boolean addSong(String title, double duration) {
         if(findSong(title) == null) {
-            this.songs.add(new Song(title, duration));
+            songs.add(new Song(title, duration));
             return true;
         }
         return false;
     }
 
     private Song findSong(String title) {
-        for(Song checkedSong: this.songs) {
-            if(checkedSong.getTitle().equals(title)) {
-                return checkedSong;
-            }
-        }
-        return null;
+        return songs.findSong(title);
     }
 
     public boolean addToPlayList(int trackNumber, LinkedList<Song> playList) {
         int index = trackNumber -1;
-        if((index >0) && (index <= this.songs.size())) {
-            playList.add(this.songs.get(index));
+        if((index > 0) && (index <= songs.getSongs().size())) {
+            playList.add(songs.getSongs().get(index));
             return true;
         }
         System.out.println("This album does not have a track " + trackNumber);
@@ -49,5 +44,31 @@ public class Album {
         }
         System.out.println("The song " + title + " is not in this album");
         return false;
+    }
+    
+    private class SongList{
+    	
+    	private ArrayList<Song> songs;
+    	
+    	public SongList(){
+    		songs = new ArrayList<Song>();
+    	}
+    	
+    	private ArrayList<Song> getSongs(){
+    		return songs;
+    	}
+    	
+    	private void add(Song song){
+    		songs.add(song);
+    	}
+    	
+    	private Song findSong(String title){
+    		for(Song checkedSong: getSongs()) {
+                if(checkedSong.getTitle().equals(title)) {
+                    return checkedSong;
+                }
+            }
+            return null;
+    	}
     }
 }
